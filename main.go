@@ -5,7 +5,10 @@ import (
 	"os"
 
 	connectDB "github.com/aldimaulana1605/bootcamp-api-hmsi/ConnectDB"
-	"github.com/aldimaulana1605/bootcamp-api-hmsi/query"
+	"github.com/aldimaulana1605/bootcamp-api-hmsi/modules/customers/customerHandler"
+	customerrepository "github.com/aldimaulana1605/bootcamp-api-hmsi/modules/customers/customerRepository"
+	"github.com/aldimaulana1605/bootcamp-api-hmsi/modules/customers/customerUsecase"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 )
@@ -45,7 +48,7 @@ if errConn!= nil {
 fmt.Println("Successfully connected!")
 
 //DB struct initializes
-DB := query.DB{Conn: db}
+// DB := query.DB{Conn: db}
 
 // //Create Customer
 // err = DB.Create(&query.Customers{
@@ -61,12 +64,12 @@ DB := query.DB{Conn: db}
 // fmt.Println("Insert Data Berhasil")
 
 //Read Customer
-result, err := DB.Read()
-if err != nil {
-	log.Error().Msg(errConn.Error())
-	os.Exit(1)
-}
-fmt.Println(result)
+// result, err := DB.Read()
+// if err != nil {
+// 	log.Error().Msg(errConn.Error())
+// 	os.Exit(1)
+// }
+// fmt.Println(result)
 
 // //Update Customer
 // err = DB.Update(&query.Customers{
@@ -90,6 +93,19 @@ fmt.Println(result)
 // }
 
 // fmt.Printf("Deleted Berhasil")
+
+// inisialisasi router
+var  router = gin.Default()
+
+// inisialisasi modules
+customerRepo := customerrepository.NewCustomerRepository(db)
+customerUC := customerUsecase.NewCustomerUsecase(customerRepo)
+customerHandler.NewCustomerHandler(router, customerUC)
+
+log.Info().Msg("Server running on port " + PORT)
+router.Run(":"+ PORT)
+
+
 
 }
 
