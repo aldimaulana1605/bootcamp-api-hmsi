@@ -34,3 +34,19 @@ func (db *DB) GetAll() (*[]models.Customers, error) {
 
 	
 }
+
+func (db *DB) Create(c *models.RequestInsertCustomer) error {
+	stmt, err := db.Conn.Prepare(`INSERT INTO customers (name, phone, email, age) VALUES ($1, $2, $3, $4)`)
+
+	if err != nil {
+		return err
+	}
+
+	_, errExec := stmt.Exec(c.Name, c.Phone, c.Email, c.Age)
+
+	if errExec != nil {
+		return errExec
+	}
+
+	return nil
+}

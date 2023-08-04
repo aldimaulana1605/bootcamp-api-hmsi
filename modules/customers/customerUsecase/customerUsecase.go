@@ -19,5 +19,18 @@ func (r *customerRepository) FindAll() (*[]models.Customers, error) {
 	if err!= nil {
         return nil, err
     }
+
+	// TODO : logic
+	
 	return result, nil
+}
+
+func (r *customerRepository) Insert(c *models.RequestInsertCustomer) error {
+	err := r.Repo.Create(c)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
