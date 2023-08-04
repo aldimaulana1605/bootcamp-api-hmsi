@@ -94,19 +94,16 @@ fmt.Println("Successfully connected!")
 
 // fmt.Printf("Deleted Berhasil")
 
-// inisialisasi router
-var  router = gin.Default()
+// initialize router
+router := gin.Default()
 
-// inisialisasi modules
+// initialize module customers
 customerRepo := customerrepository.NewCustomerRepository(db)
 customerUC := customerUsecase.NewCustomerUsecase(customerRepo)
 customerHandler.NewCustomerHandler(router, customerUC)
 
-log.Info().Msg("Server running on port " + PORT)
-router.Run(":"+ PORT)
-
-
-
+log.Debug().Msg("Service started on Port: " + PORT)
+router.Run(":" + PORT)
 }
 
 
